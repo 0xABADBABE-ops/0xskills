@@ -1,5 +1,7 @@
 # 0xskills
 
+[![skills](https://skills.sh/b/0xabadbabe-ops/0xskills)](https://skills.sh/0xabadbabe-ops/0xskills)
+
 Agent skills I use, published so they install anywhere:
 
     npx skills add 0xabadbabe-ops/0xskills
