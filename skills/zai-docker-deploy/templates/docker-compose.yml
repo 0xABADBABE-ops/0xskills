@@ -1,0 +1,29 @@
+services:
+  archdoc:
+    build:
+      context: .
+      args:
+        BUILD_ID: local
+    image: zai-archdoc:local
+    container_name: zai-archdoc
+    ports:
+      - "8081:81"     # Caddy reverse proxy (primary entry)
+      - "3000:3000"   # Next.js standalone server (direct)
+    environment:
+      NODE_ENV: production
+      # Docker pre-sets HOSTNAME to the container hostname; force it back to
+      # 0.0.0.0 so Next binds all interfaces (loopback included) for Caddy.
+      HOSTNAME: 0.0.0.0
+      # start.sh already defaults to this; set explicitly for clarity.
+      DATABASE_URL: file:/app/db/custom.db
+    restart: unless-stopped
+
+    # Persist the SQLite db across rebuilds. On first start this hides the
+    # image's packaged db/custom.db, so seed it first or omit the volume:
+    #   docker run --rm -v zai-archdoc-db:/mnt zai-archdoc:local sh -c \
+    #     'cp /app/db/custom.db /mnt/custom.db'
+    # volumes:
+    #   - zai-archdoc-db:/app/db
+
+# volumes:
+#   zai-archdoc-db:

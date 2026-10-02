@@ -1,0 +1,15 @@
+.git
+node_modules
+.next
+.qwen
+*.tar
+*.tar.gz
+*.log
+dev.log
+server.log
+*.pid
+tool-results
+upload
+Dockerfile
+docker-compose.yml
+.dockerignore
