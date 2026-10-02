@@ -1,29 +1,28 @@
 services:
-  archdoc:
+  app:
     build:
       context: .
       args:
-        BUILD_ID: local
-    image: zai-archdoc:local
-    container_name: zai-archdoc
+        BUILD_ID: ${BUILD_ID:-local}
+    image: "${IMAGE_NAME:-zai-app}:${IMAGE_TAG:-local}"
+    container_name: "${CONTAINER_NAME:-zai-app}"
     ports:
-      - "8081:81"     # Caddy reverse proxy (primary entry)
-      - "3000:3000"   # Next.js standalone server (direct)
+      - "${PORT_CADDY:-8081:81}"    # Caddy reverse proxy (primary entry)
+      - "${PORT_APP:-3000:3000}"    # app standalone server (direct)
     environment:
-      NODE_ENV: production
+      NODE_ENV: ${NODE_ENV:-production}
       # Docker pre-sets HOSTNAME to the container hostname; force it back to
-      # 0.0.0.0 so Next binds all interfaces (loopback included) for Caddy.
-      HOSTNAME: 0.0.0.0
+      # 0.0.0.0 so the app binds all interfaces (loopback included) for Caddy.
+      HOSTNAME: ${HOSTNAME:-0.0.0.0}
       # start.sh already defaults to this; set explicitly for clarity.
-      DATABASE_URL: file:/app/db/custom.db
-    restart: unless-stopped
+      DATABASE_URL: ${DATABASE_URL:-file:/app/db/custom.db}
+    restart: ${RESTART_POLICY:-unless-stopped}
 
-    # Persist the SQLite db across rebuilds. On first start this hides the
-    # image's packaged db/custom.db, so seed it first or omit the volume:
-    #   docker run --rm -v zai-archdoc-db:/mnt zai-archdoc:local sh -c \
-    #     'cp /app/db/custom.db /mnt/custom.db'
+    # Persist the SQLite db across rebuilds. Keep the default name generic so
+    # the template remains reusable across ZAI deployments; override via .env if
+    # a project-specific name is desired.
     # volumes:
-    #   - zai-archdoc-db:/app/db
+    #   - ${VOLUME_NAME:-zai-app-db}:/app/db
 
 # volumes:
-#   zai-archdoc-db:
+#   ${VOLUME_NAME:-zai-app-db}:
