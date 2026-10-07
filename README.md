@@ -6,9 +6,10 @@ Agent skills I use, published so they install anywhere:
 
     npx skills add 0xabadbabe-ops/0xskills
 
-or one directly:
+or directly:
 
     npx skills add 0xabadbabe-ops/0xskills --skill biome
+    npx skills add 0xabadbabe-ops/0xskills --skill zai-docker-deploy
 
 Each skill lives in its own folder under `skills/`. A skill is a SKILL.md plus whatever scripts it needs — the scripts do the mechanical work, the SKILL.md tells the agent what to check afterwards.
 
